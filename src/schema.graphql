@@ -6,13 +6,13 @@ type Query {
 
 type Mutation {
   #Create a link
-  post(description: String!, url: String!): Link! 
+  postLink(description: String!, url: String!): Link! 
 
   #Update a link
-  update(id: ID!, description: String!, url: String!): Link 
+  updateLink(id: ID!, description: String, url: String): Link 
 
   #Delete a link
-  delete(id: ID!): Link
+  deleteLink(id: ID!): Link
 }
 
 type Link {
