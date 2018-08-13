@@ -30,7 +30,6 @@ const resolvers = {
         description: args.description,
         url: args.url
       }
-
       links.push(link);
       return link;
     },
