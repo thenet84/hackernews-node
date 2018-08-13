@@ -11,7 +11,10 @@ let idCount = links.length;
 const resolvers = {
   Query: {
     info: () => 'My first GraphQL Api',
-    feed: () => links
+    feed: () => links,
+    link: (root, args) => {
+      return links.find((l) => { return l.id === args.id; });
+    }
   },
   Mutation: {
     post: (root, args) =>{
