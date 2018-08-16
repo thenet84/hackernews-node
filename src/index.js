@@ -25,29 +25,23 @@ const resolvers = {
       }, info);
       
     },
-    updateLink: (root, args) =>{
-      let index=-1;
-      links = links.map((link,i) => {
-        if(link.id === args.id){
-          index = i;
-          link = {
-            ...link, 
-            description: args.description || link.description,
-            url: args.url || link.url
-          }
+    updateLink: (root, args, context, info) =>{
+      return context.db.mutation.updateLink({
+        data: {
+          description: args.description,
+          url: args.url 
+        },
+        where: {
+          id: args.id
         }
-        return link;
-      });
-      return links[index];
+      }, info);
     },
-    deleteLink: (root, args) =>{
-      const index = links.map(x => {
-        return x.id;
-      }).indexOf(args.id);
-      if (index !== -1){
-        return links.splice(index, 1)[0];
-      }
-      return null;
+    deleteLink: (root, args, context, info) =>{
+      return context.db.mutation.deleteLink({
+        where: {
+          id: args.id
+        }
+      }, info);
     }
   }
 };
