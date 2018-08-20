@@ -6,13 +6,21 @@ type Query {
 }
 
 type Mutation {
-  # Create a link
+  singup(name: String!, email:String!, password:String!): AuthPayLoad
+  login(email:String!, password:String!): AuthPayLoad
   postLink(description: String!, url: String!): Link! 
-
-  # Update a link
   updateLink(id: ID!, description: String, url: String): Link 
-
-  # Delete a link
   deleteLink(id: ID!): Link
 }
 
+type AuthPayLoad{
+  token: String
+  user: User
+}
+
+type User{
+  id: ID!
+  name: String!
+  email: String!
+  links: [Link!]!
+}
