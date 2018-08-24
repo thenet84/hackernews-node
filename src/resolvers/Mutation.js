@@ -66,10 +66,31 @@ function deleteLink(root, args, context, info){
   }, info);
 }
 
+async function vote(root, args, context, info){
+  const userId = getUserId(context);
+
+  const linkExist = await context.db.exists.Vote({
+    user: { id: userId },
+    link: { id: args.linkId }
+  })
+
+  if(linkExist){
+    throw Error(`Link is already voted. Id: ${args.linkId}`)
+  }
+
+  return context.db.mutation.createVote({
+    data: {
+      user: { connect: { id: userId } },
+      link: { connect: { id: args.linkId } }
+    }
+  }, info)
+}
+
 module.exports = {
   singup,
   login,
   postLink,
   updateLink,
-  deleteLink
+  deleteLink,
+  vote
 }

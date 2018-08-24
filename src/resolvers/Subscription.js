@@ -20,7 +20,7 @@ const updateLink = {
 
 function deleteLinkSubscribe(parent, args, context, info){
   return context.db.subscription.link(
-    { where : {mutation_in: ['DELETED'] } },
+    { where : { mutation_in: ['DELETED'] } },
     info
   )
 }
@@ -29,8 +29,21 @@ const deleteLink = {
   subscribe: deleteLinkSubscribe
 }
 
+
+function voteLinkSubscribe(parent, args, context, info){
+  return context.db.subscription.vote(
+    { where: { mutation_in: ['CREATED'] } },
+    info
+  )
+}
+
+const newVote = {
+  subscribe: voteLinkSubscribe
+}
+
 module.exports = {
   newLink,
   updateLink,
-  deleteLink
+  deleteLink,
+  newVote
 }
