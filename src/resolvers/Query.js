@@ -2,7 +2,7 @@ function info(){
   return 'My first GraphQL Api';
 }
 
-function feed(root, args, context, info){
+async function feed(root, args, context, info){
   const where = args.filter 
     ? {
       OR: [
@@ -10,9 +10,23 @@ function feed(root, args, context, info){
         {description_contains: args.filter}
       ]
     } : {};
-  return context.db.query.links({ 
+  
+  const queriedLinks = await context.db.query.links({ 
     where, skip: args.skip, first: args.first, orderBy: args.orderBy
-  }, info);
+  }, `{ id }`);
+
+  const countSelectionSet = `{
+    aggregate {
+      count
+    }
+  }`;
+
+  const linksConnection = await context.db.query.linksConnection({}, countSelectionSet);
+
+  return {
+    count: linksConnection.aggregate.count,
+    linkIds: queriedLinks.map(link => link.id)
+  };
 }
 
 function link(root, args, context, info){
